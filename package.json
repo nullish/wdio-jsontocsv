@@ -1,0 +1,14 @@
+{
+  "name": "@nullish/wdio-jsontocsv",
+  "version": "1.0.0",
+  "description": "Convert wdio ouptut from JSON to CSV",
+  "main": "jsontocsv.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "json,wdio,webdriverio"
+  ],
+  "author": "Nullish",
+  "license": "GNU"
+}

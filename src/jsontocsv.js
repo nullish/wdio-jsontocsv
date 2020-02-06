@@ -11,7 +11,7 @@ const runs = JSON.parse(fs.readFileSync(jsonInput));
 // Array to hold output.
 var out = [];
 // Header row
-out.push('"scriptId","suiteName","start","end","browserName","platformName","platform","deviceName","orientation","testName","duration","state","errorType","error"');
+out.push('"scriptId","suiteName","start","end","browserName","platformName","deviceName","orientation","testName","duration","state","errorType","error"');
 
 for (run of runs ) {
 	var startTime = run.start;

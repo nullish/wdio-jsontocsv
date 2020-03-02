@@ -6,7 +6,15 @@ const jsontocsv = (...args) => {
 
 // Load webdriver merged output JSON file into var.
 const jsonInput = args[0] || process.argv[2];
-const runs = JSON.parse(fs.readFileSync(jsonInput));
+let runs = JSON.parse(fs.readFileSync(jsonInput));
+
+/* Behaviour to handle if only one report JSON file is in scope rather than several merged objects.
+If it's a single object, create an empty array for processing and push the file contents as the first element. */
+
+if (!runs.length) {
+	runs = []
+	runs.push(JSON.parse(fs.readFileSync(jsonInput)))
+}
 
 // Array to hold output.
 var out = [];

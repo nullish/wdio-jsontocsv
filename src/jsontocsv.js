@@ -21,7 +21,7 @@ const jsontocsv = (...args) => {
 // Receives a JSON output from wdio-json-reporter and converts selected elements to CSV. Ouputs to STDOUT.
 
 const dir = argv.directory
-const scriptFiles = getFileList(dir);
+const scriptFiles = getFileList(dir, true);
 
 // Load webdriver merged output JSON file into var.
 const jsonInput = args[0] || argv.file;
@@ -77,14 +77,17 @@ exceptions = exceptions.join("\n");
 console.log(exceptions); // append list of files not run due to connection drop to end of report.
 }
 
-function getFileList(dir) {
+function getFileList(dir, removeExtension) {
 	// Get list of files from specified directory
 	const fileNames = fs.readdirSync(dir);
 	let fileArray = [];
 	var i = 0;
 	fileNames.forEach(fileName => {
-		console.log(fileName);
-		fileArray.push(fileName);
+		if (removeExtension) {
+			fileArray.push(fileName.replace(/\..*/g, ""));
+		} else {
+			fileArray.push(fileName);
+		}
 	});
 	return fileArray;
 }

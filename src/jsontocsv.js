@@ -71,7 +71,7 @@ for (run of runs ) {
 // Output
 csv = out.join('\n');
 console.log(csv);
-console.log(`"EXCEPTIONS NOT RUN"`);
+console.log(`\n\n"EXCEPTIONS NOT RUN"`);
 let exceptions = arrayDiff(scriptFiles, scriptList);
 exceptions = exceptions.join("\n");
 console.log(exceptions); // append list of files not run due to connection drop to end of report.

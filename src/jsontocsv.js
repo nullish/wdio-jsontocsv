@@ -1,11 +1,30 @@
 const fs = require('fs')
 const path = require('path')
+const yargs = require('yargs')
+
+// Command line arguments from yargs
+const argv = yargs
+.option('directory', {
+  alias: 'd',
+  describe: 'Directory containing test scripts',
+  type: 'string'
+})
+.option('file', {
+  alias: 'f',
+  default: './manifest.json',
+  describe: 'File path to JSON file for converting',
+  type: 'string'
+})
+.argv
 
 const jsontocsv = (...args) => {
 // Receives a JSON output from wdio-json-reporter and converts selected elements to CSV. Ouputs to STDOUT.
 
+const dir = argv.directory
+const scriptFiles = getFileList(dir);
+
 // Load webdriver merged output JSON file into var.
-const jsonInput = args[0] || process.argv[2];
+const jsonInput = args[0] || argv.file;
 let runs = JSON.parse(fs.readFileSync(jsonInput));
 
 /* Behaviour to handle if only one report JSON file is in scope rather than several merged objects.
@@ -18,6 +37,7 @@ if (!runs.length) {
 
 // Array to hold output.
 var out = [];
+var scriptList = []; // to hold list of script IDs to compare to files
 // Header row
 out.push('"scriptId","suiteName","start","end","browserName","platformName","deviceName","orientation","testName","duration","state","errorType","error"');
 
@@ -34,6 +54,7 @@ for (run of runs ) {
 	for (suite of suites) {
 		var suiteName = suite.name;
 		var scriptId = constructScriptId(suiteName);
+		scriptList.push(scriptId);
 		var tests = suite.tests;
 		for (test of tests) {
 			var testName = test.name;
@@ -50,6 +71,26 @@ for (run of runs ) {
 // Output
 csv = out.join('\n');
 console.log(csv);
+console.log("EXCEPTIONS NOT RUN");
+console.log(arrayDiff(scriptFiles)); // append list of files not run due to connection drop to end of report.
+}
+
+function getFileList(dir) {
+	// Get list of files from specified directory
+	const fileNames = fs.readdirSync(dir);
+	let fileArray = [];
+	var i = 0;
+	fileNames.forEach(fileName => {
+		console.log(fileName);
+		fileArray.push(fileName);
+	});
+	return fileArray;
+}
+
+function arrayDiff(arrX, arrY) {
+  // returns elements in array X that do not appear in array Y
+  arrDiff = arrX.filter(elX => !arrY.includes(elX));
+  return arrDiff;
 }
 
 function checkExist(e) {

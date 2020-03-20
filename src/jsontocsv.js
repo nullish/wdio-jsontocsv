@@ -5,15 +5,15 @@ const yargs = require('yargs')
 // Command line arguments from yargs
 const argv = yargs
 .option('directory', {
-  alias: 'd',
-  describe: 'Directory containing test scripts',
-  type: 'string'
+	alias: 'd',
+	describe: 'Directory containing test scripts',
+	type: 'string'
 })
 .option('file', {
-  alias: 'f',
-  default: './manifest.json',
-  describe: 'File path to JSON file for converting',
-  type: 'string'
+	alias: 'f',
+	default: './manifest.json',
+	describe: 'File path to JSON file for converting',
+	type: 'string'
 })
 .argv
 
@@ -21,7 +21,10 @@ const jsontocsv = (...args) => {
 // Receives a JSON output from wdio-json-reporter and converts selected elements to CSV. Ouputs to STDOUT.
 
 const dir = argv.directory
-const scriptFiles = getFileList(dir, true);
+
+if (dir) {
+	const scriptFiles = getFileList(dir, true);
+}
 
 // Load webdriver merged output JSON file into var.
 const jsonInput = args[0] || argv.file;
@@ -71,10 +74,14 @@ for (run of runs ) {
 // Output
 csv = out.join('\n');
 console.log(csv);
-console.log(`\n\n"EXCEPTIONS NOT RUN"`);
-let exceptions = arrayDiff(scriptFiles, scriptList);
-exceptions = exceptions.join("\n");
-console.log(exceptions); // append list of files not run due to connection drop to end of report.
+
+if (dir) {
+		// If directory parameter has been set, also output list of scripts that haven't run
+		console.log(`\n\n"EXCEPTIONS NOT RUN"`);
+		let exceptions = arrayDiff(scriptFiles, scriptList);
+		exceptions = exceptions.join("\n");
+		console.log(exceptions); // append list of files not run due to connection drop to end of report.
+	}
 }
 
 function getFileList(dir, removeExtension) {
@@ -108,7 +115,7 @@ function checkExist(e) {
 }
 
 function constructScriptId (scriptName) {
-var scriptId = scriptName.match(/(?<=^T)[0-9]+/);
+	var scriptId = scriptName.match(/(?<=^T)[0-9]+/);
 	if (scriptId !== null) {
 		scriptId = scriptId.toString();
 		scriptId = "T" + scriptId.padStart(2, 0);

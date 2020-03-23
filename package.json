@@ -10,5 +10,8 @@
     "json,wdio,webdriverio"
   ],
   "author": "Nullish",
-  "license": "GNU"
+  "license": "GNU",
+  "dependencies": {
+    "yargs": "^15.3.1"
+  }
 }

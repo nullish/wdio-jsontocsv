@@ -2,6 +2,10 @@ const fs = require('fs')
 const path = require('path')
 const yargs = require('yargs')
 
+
+
+const jsontocsv = (...args) => {
+
 // Command line arguments from yargs
 const argv = yargs
 .option('directory', {
@@ -17,14 +21,9 @@ const argv = yargs
 })
 .argv
 
-const jsontocsv = (...args) => {
 // Receives a JSON output from wdio-json-reporter and converts selected elements to CSV. Ouputs to STDOUT.
 
 const dir = argv.directory
-
-if (dir) {
-	const scriptFiles = getFileList(dir, true);
-}
 
 // Load webdriver merged output JSON file into var.
 const jsonInput = args[0] || argv.file;
@@ -78,23 +77,20 @@ console.log(csv);
 if (dir) {
 		// If directory parameter has been set, also output list of scripts that haven't run
 		console.log(`\n\n"EXCEPTIONS NOT RUN"`);
+		const scriptFiles = getFileList(dir, true);
 		let exceptions = arrayDiff(scriptFiles, scriptList);
 		exceptions = exceptions.join("\n");
 		console.log(exceptions); // append list of files not run due to connection drop to end of report.
 	}
 }
 
-function getFileList(dir, removeExtension) {
+function getFileList(dir) {
 	// Get list of files from specified directory
 	const fileNames = fs.readdirSync(dir);
 	let fileArray = [];
 	var i = 0;
 	fileNames.forEach(fileName => {
-		if (removeExtension) {
-			fileArray.push(fileName.replace(/\..*/g, ""));
-		} else {
-			fileArray.push(fileName);
-		}
+		fileArray.push(fileName.replace(/\..*/g, ""));
 	});
 	return fileArray;
 }

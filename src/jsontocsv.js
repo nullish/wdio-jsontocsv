@@ -122,6 +122,7 @@ function checkExist(e) {
 }
 
 function constructUID (scriptName, testName, browserName, platformName, deviceName) {
+	// Construct uinique identifier for reports, combining suite, test and capabilities details.
 	var scriptId = scriptName.match(/(?<=^T)[0-9]+/);
 	if (scriptId !== null) {
 		scriptId = scriptId.toString();

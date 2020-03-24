@@ -49,7 +49,7 @@ if (!runs.length) {
 var out = [];
 var scriptList = []; // to hold list of script IDs to compare to files
 // Header row
-out.push('"scriptId","suiteName","start","end","browserName","platformName","deviceName","orientation","testName","duration","state","errorType","error"');
+out.push('"scriptId","suiteName","browserName","platformName","deviceName","orientation","testName","state","errorType","error","start","end","duration"');
 
 for (run of runs ) {
 	var startTime = run.start;
@@ -72,7 +72,7 @@ for (run of runs ) {
 			var state = test.state;
 			var errorType = checkExist(test.errorType);
 			var error = checkExist(test.error);
-			var suiteEls = [scriptId, suiteName, startTime, endTime, browserName, platformName, deviceName, orientation, testName, duration, state, errorType, error];
+			var suiteEls = [scriptId, suiteName, browserName, platformName, deviceName, orientation, testName, state, errorType, error, startTime, endTime, duration];
 			line = '"' + suiteEls.join('","') + '"' ;
 			out.push(line);
 		}

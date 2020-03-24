@@ -19,6 +19,12 @@ const argv = yargs
 	describe: 'File path to JSON file for converting',
 	type: 'string'
 })
+.option('suppress', {
+	alias: 's',
+	default: false,
+	describe: 'Suppresses full report of tests run',
+	type: 'boolean'
+})
 .argv
 
 // Receives a JSON output from wdio-json-reporter and converts selected elements to CSV. Ouputs to STDOUT.
@@ -27,6 +33,8 @@ const dir = argv.directory
 
 // Load webdriver merged output JSON file into var.
 const jsonInput = args[0] || argv.file;
+const suppress = argv.suppress;
+
 let runs = JSON.parse(fs.readFileSync(jsonInput));
 
 /* Behaviour to handle if only one report JSON file is in scope rather than several merged objects.
@@ -72,7 +80,10 @@ for (run of runs ) {
 }
 // Output
 csv = out.join('\n');
-console.log(csv);
+
+if (!suppress) {
+	console.log(csv);
+}
 
 if (dir) {
 		// If directory parameter has been set, also output list of scripts that haven't run

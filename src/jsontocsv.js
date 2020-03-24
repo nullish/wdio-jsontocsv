@@ -49,7 +49,7 @@ if (!runs.length) {
 var out = [];
 var scriptList = []; // to hold list of script IDs to compare to files
 // Header row
-out.push('"scriptId","suiteName","browserName","platformName","deviceName","orientation","testName","state","errorType","error","start","end","duration"');
+out.push('"uniqueId","suiteName","browserName","platformName","deviceName","orientation","testName","state","errorType","error","start","end","duration"');
 
 for (run of runs ) {
 	var startTime = run.start;
@@ -63,8 +63,7 @@ for (run of runs ) {
 	var suites = run.suites;
 	for (suite of suites) {
 		var suiteName = suite.name;
-		var scriptId = constructScriptId(suiteName);
-		scriptList.push(scriptId);
+		// scriptList.push(scriptId);
 		var tests = suite.tests;
 		for (test of tests) {
 			var testName = test.name;
@@ -72,7 +71,8 @@ for (run of runs ) {
 			var state = test.state;
 			var errorType = checkExist(test.errorType);
 			var error = checkExist(test.error);
-			var suiteEls = [scriptId, suiteName, browserName, platformName, deviceName, orientation, testName, state, errorType, error, startTime, endTime, duration];
+			var uniqueId = constructUID(suiteName, testName, browserName, platformName, deviceName)
+			var suiteEls = [uniqueId, suiteName, browserName, platformName, deviceName, orientation, testName, state, errorType, error, startTime, endTime, duration];
 			line = '"' + suiteEls.join('","') + '"' ;
 			out.push(line);
 		}
@@ -121,7 +121,7 @@ function checkExist(e) {
 	}
 }
 
-function constructScriptId (scriptName) {
+function constructUID (scriptName, testName, browserName, platformName, deviceName) {
 	var scriptId = scriptName.match(/(?<=^T)[0-9]+/);
 	if (scriptId !== null) {
 		scriptId = scriptId.toString();
@@ -129,7 +129,25 @@ function constructScriptId (scriptName) {
 	} else {
 		scriptId = "";
 	}
-	return scriptId;
+	let shouldAssert = testName.match(/^S[0-9]+/g)[0];
+
+	let browserPfx = makePrefix(browserName);
+	let platformPfx = makePrefix(platformName);
+	let devicePfx = makePrefix(deviceName);
+
+	let uid = `${scriptId}:${shouldAssert}:${browserPfx}:${platformPfx}:${devicePfx}`;
+
+	return uid;
+
+	function makePrefix(str) {
+		let pfx = "";
+		if(str) {
+			pfx = str.match(/^.{3}/g).toString();
+		} else {
+			pfx = "";
+		}
+		return pfx;
+	}
 };
 
 module.exports = jsontocsv;

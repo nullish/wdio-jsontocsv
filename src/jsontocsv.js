@@ -70,7 +70,7 @@ for (run of runs ) {
 			var duration = test.duration;
 			var state = test.state;
 			var errorType = checkExist(test.errorType);
-			var error = checkExist(test.error);
+			var error = checkExist(test.error).replace(/\n/g," | ");
 			var uniqueId = constructUID(suiteName, testName, browserName, platformName, deviceName)
 			var suiteEls = [uniqueId, suiteName, browserName, platformName, deviceName, orientation, testName, state, errorType, error, startTime, endTime, duration];
 			line = '"' + suiteEls.join('","') + '"' ;

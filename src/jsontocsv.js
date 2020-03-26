@@ -49,7 +49,7 @@ if (!runs.length) {
 var out = [];
 var scriptList = []; // to hold list of script IDs to compare to files
 // Header row
-out.push('"uniqueId","suiteName","browserName","platformName","deviceName","orientation","testName","state","errorType","error","start","end","duration"');
+out.push('"uniqueId","scriptId","testId","suiteName","browserName","platformName","deviceName","orientation","testName","state","errorType","error","start","end","duration"');
 
 for (run of runs ) {
 	var startTime = run.start;
@@ -71,8 +71,11 @@ for (run of runs ) {
 			var state = test.state;
 			var errorType = checkExist(test.errorType);
 			var error = checkExist(test.error).replace(/\n/g," | ");
-			var uniqueId = constructUID(suiteName, testName, browserName, platformName, deviceName)
-			var suiteEls = [uniqueId, suiteName, browserName, platformName, deviceName, orientation, testName, state, errorType, error, startTime, endTime, duration];
+			var ids = constructUID(suiteName, testName, browserName, platformName, deviceName)
+			var uniqueId = ids.uid
+			var scriptId = ids.scriptId
+			var testId = ids.testId
+			var suiteEls = [uniqueId, scriptId, testId, suiteName, browserName, platformName, deviceName, orientation, testName, state, errorType, error, startTime, endTime, duration];
 			line = '"' + suiteEls.join('","') + '"' ;
 			out.push(line);
 		}
@@ -138,7 +141,11 @@ function constructUID (scriptName, testName, browserName, platformName, deviceNa
 
 	let uid = `${scriptId}:${shouldAssert}:${browserPfx}:${platformPfx}:${devicePfx}`;
 
-	return uid;
+	return {
+		"uid": uid,
+		"scriptId": scriptId,
+		"testId": shouldAssert
+	};
 
 	function makePrefix(str) {
 		let pfx = "";

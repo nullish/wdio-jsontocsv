@@ -49,7 +49,7 @@ if (!runs.length) {
 var out = [];
 var scriptList = []; // to hold list of script IDs to compare to files
 // Header row
-out.push('"uniqueId","scriptId","testId","suiteName","browserName","platformName","deviceName","orientation","testName","state","errorType","error","start","end","duration"');
+out.push('"uniqueId","scriptId","testId","suiteName","browserName","platformName","deviceName","orientation","testName","state","errorType","error","imageVariance", start","end","duration"');
 
 for (run of runs ) {
 	var startTime = run.start;
@@ -157,5 +157,17 @@ function constructUID (scriptName, testName, browserName, platformName, deviceNa
 		return pfx;
 	}
 };
+
+function getImageVariance(errDetail) {
+	/* Receives wdio error message. If the message contains image comparison variane from baseline 
+	the function returns the the value of the variance. */
+	var ivary = errDetail.match(/[0-9]{1,}\.[0-9]{1,}/g);
+	if (!ivary) {
+		ivary = "";
+	} else {
+		ivary = ivary.toString();
+	}
+	return ivary;
+}
 
 module.exports = jsontocsv;

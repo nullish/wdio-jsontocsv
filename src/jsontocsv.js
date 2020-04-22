@@ -49,7 +49,7 @@ if (!runs.length) {
 var out = [];
 var scriptList = []; // to hold list of script IDs to compare to files
 // Header row
-out.push('"uniqueId","scriptId","testId","suiteName","browserName","platformName","deviceName","orientation","testName","state","errorType","error","Expected URL","Actual URL","imageVariance", "start","end","duration"');
+out.push('"uniqueId","scriptId","testId","suiteName","browserName","platformName","deviceName","orientation","testName","state","errorType","error","expectedURL","actualURL","imageVariance", "start","end","duration"');
 
 for (run of runs ) {
 	var startTime = run.start;

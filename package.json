@@ -1,6 +1,6 @@
 {
   "name": "@nullish/wdio-jsontocsv",
-  "version": "3.3.0",
+  "version": "3.4.0",
   "description": "Convert wdio ouptut from JSON to CSV",
   "main": "jsontocsv.js",
   "scripts": {

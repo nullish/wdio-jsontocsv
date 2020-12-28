@@ -1,8 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const yargs = require('yargs')
-
-
+const { v4: uuidv4 } = require('uuid');
 
 const jsontocsv = (...args) => {
 
@@ -49,13 +48,15 @@ if (!runs.length) {
 var out = [];
 var scriptList = []; // to hold list of script IDs to compare to files
 // Header row
-out.push('"uniqueId","scriptId","testId","suiteName","browserName","platformName","deviceName","orientation","testName","state","errorType","error","expectedURL","actualURL","imageVariance", "start","end","duration"');
+out.push('"UUID","uniqueId","specPath","scriptId","testId","suiteName","browserName","platformName","deviceName","orientation","testName","state","errorType","error","expectedURL","actualURL","imageVariance", "start","end","duration"');
 
 for (run of runs ) {
 	var startTime = run.start;
 	var endTime = run.end;
 	var browserName = checkExist(run.capabilities.browserName);
 	var platformName = run.capabilities.platformName;
+	var specURI = run.specs[0];
+	var specPath = specURI.replace(/\/[a-zA-Z0-9()_-]*?\.js/, ""); // Extracts directory from test spec absolute file path.
 	// Select platform name based on which variant of field is populated.
 	platformName = typeof(platformName) !== 'undefined' ? platformName : run.capabilities.platform
 	var deviceName = checkExist(run.capabilities.deviceName);
@@ -74,11 +75,12 @@ for (run of runs ) {
 			var urlActual = getAssertionURLs(errorType, error).actual;
 			var urlExpected = getAssertionURLs(errorType, error).expected;
 			var imageVariance = getImageVariance(error);
+			var timeUuid = uuidv4(); // timestamp based univeral unique identififier
 			var ids = constructUID(suiteName, testName, browserName, platformName, deviceName)
 			var uniqueId = ids.uid
 			var scriptId = ids.scriptId
 			var testId = ids.testId
-			var suiteEls = [uniqueId, scriptId, testId, suiteName, browserName, platformName, deviceName, orientation, testName, state, errorType, error, urlExpected, urlActual, imageVariance, startTime, endTime, duration];
+			var suiteEls = [timeUuid, uniqueId, specPath, scriptId, testId, suiteName, browserName, platformName, deviceName, orientation, testName, state, errorType, error, urlExpected, urlActual, imageVariance, startTime, endTime, duration];
 			line = '"' + suiteEls.join('","') + '"' ;
 			out.push(line);
 		}

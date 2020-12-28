@@ -1,2 +1,2 @@
-// make jsontocsv available at the root
-module.exports = require('./src/jsontocsv')
+const joinjson = require('./src/joinjson');
+joinjson();

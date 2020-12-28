@@ -12,6 +12,7 @@
   "author": "Nullish",
   "license": "GNU",
   "dependencies": {
-    "yargs": "^15.3.1"
+    "uuid": "^8.3.2",
+    "yargs": "^15.4.1"
   }
 }

@@ -1,2 +1,2 @@
-const joinjson = require('./src/joinjson');
-joinjson();
+const jsontocsv = require('./src/jsontocsv');
+jsontocsv();

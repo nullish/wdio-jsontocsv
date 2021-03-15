@@ -48,7 +48,7 @@ if (!runs.length) {
 var out = [];
 var scriptList = []; // to hold list of script IDs to compare to files
 // Header row
-out.push('"UUID","uniqueId","specPath","scriptId","testId","suiteName","browserName","platformName","deviceName","orientation","testName","state","errorType","error","expectedURL","actualURL","imageVariance", "start","end","duration"');
+out.push('"UUID","uniqueId","specPath","scriptId","testId","suiteName","initialPath","browserName","platformName","deviceName","orientation","testName","state","errorType","error","expectedURL","actualURL","imageVariance", "start","end","duration"');
 
 for (run of runs ) {
 	var startTime = run.start;
@@ -64,7 +64,7 @@ for (run of runs ) {
 	var suites = run.suites;
 	for (suite of suites) {
 		var suiteName = suite.name;
-		// scriptList.push(scriptId);
+		var suiteURI = getSuiteURI(specURI);
 		var tests = suite.tests;
 		for (test of tests) {
 			var testName = test.name;
@@ -80,7 +80,7 @@ for (run of runs ) {
 			var uniqueId = ids.uid
 			var scriptId = ids.scriptId
 			var testId = ids.testId
-			var suiteEls = [timeUuid, uniqueId, specPath, scriptId, testId, suiteName, browserName, platformName, deviceName, orientation, testName, state, errorType, error, urlExpected, urlActual, imageVariance, startTime, endTime, duration];
+			var suiteEls = [timeUuid, uniqueId, specPath, scriptId, testId, suiteName, suiteURI, browserName, platformName, deviceName, orientation, testName, state, errorType, error, urlExpected, urlActual, imageVariance, startTime, endTime, duration];
 			line = '"' + suiteEls.join('","') + '"' ;
 			out.push(line);
 		}
@@ -101,6 +101,18 @@ if (dir) {
 		exceptions = exceptions.join("\n");
 		console.log(exceptions); // append list of files not run due to connection drop to end of report.
 	}
+}
+
+function getSuiteURI(specFile) {
+	// Extracts initial file URI from test script JS file
+	const scriptText = fs.readFileSync(specFile).toString();
+	let initURI;
+	try {
+		initURI = scriptText.match(/(?<=browser\.url\(shuDomain \+ ').*?(?='\))/)[0];
+	} catch(e) {
+		initURI = "";
+	}
+	return initURI;
 }
 
 function getFileList(dir) {

@@ -189,11 +189,20 @@ function getImageVariance(errDetail) {
 
 function getAssertionURLs(errType, errDetail) {
 	// Receives assertion error type and detailm, and returns expected and actual URLs.
+	function removeDomain(inUrl) {
+		if (typeof(inUrl.match(/https?:.*?\/{2}.*?\//)) !== 'undefined') {
+			let outUrl = "/" + inUrl.replace(/https?:.*?\/{2}.*?\//, "");
+			return outUrl
+		} else {
+			return "";
+		}
+	}
 	let urlActual = "";
 	let urlExpected = "";
 	if (errDetail.match(/(?<=expected\s').*?(?=')/g)) {
-		urlExpected = errDetail.match(/(?<=equal\s').*?(?=')/g);
-		urlActual = errDetail.match(/(?<=expected\s').*?(?=')/g);
+		urlExpected = "/" + errDetail.match(/(?<=match\s\/).*?(?=\$\/)/g);
+		urlExpected = urlExpected.replace(/\\/g, "");
+		urlActual = removeDomain(errDetail.match(/(?<=expected\s').*?(?=')/g)[0]);
 	}
 	return {
 		"expected": urlExpected,

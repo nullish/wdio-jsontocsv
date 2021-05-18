@@ -74,7 +74,7 @@ for (run of runs ) {
 			var error = checkExist(test.error).replace(/\n/g," | ");
 			var urlActual = getAssertionURLs(errorType, error).actual;
 			var urlExpected = getAssertionURLs(errorType, error).expected;
-			var imageVariance = getImageVariance(error);
+			var imageVariance = getImageVariance(checkExist(test.error));
 			var timeUuid = uuidv4(); // timestamp based univeral unique identififier
 			var ids = constructUID(suiteName, testName, browserName, platformName, deviceName)
 			var uniqueId = ids.uid
@@ -178,7 +178,7 @@ function constructUID (scriptName, testName, browserName, platformName, deviceNa
 function getImageVariance(errDetail) {
 	/* Receives wdio error message. If the message contains image comparison variane from baseline 
 	the function returns the the value of the variance. */
-	var ivary = errDetail.match(/[0-9]{1,}\.[0-9]{1,}/g);
+	var ivary = errDetail.match(/(?<=Received:\s\u001b\[31m)[0-9]{1,}/g);
 	if (!ivary) {
 		ivary = "";
 	} else {

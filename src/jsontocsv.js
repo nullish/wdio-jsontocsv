@@ -72,8 +72,8 @@ for (run of runs ) {
 			var state = test.state;
 			var errorType = checkExist(test.errorType);
 			var error = checkExist(test.error).replace(/\n/g," | ");
-			var urlActual = getAssertionURLs(errorType, error).actual;
-			var urlExpected = getAssertionURLs(errorType, error).expected;
+			var urlActual = getAssertionURLs(errorType, test.error).actual;
+			var urlExpected = getAssertionURLs(errorType, test.error).expected;
 			var imageVariance = getImageVariance(checkExist(test.error));
 			var timeUuid = uuidv4(); // timestamp based univeral unique identififier
 			var ids = constructUID(suiteName, testName, browserName, platformName, deviceName)
@@ -199,10 +199,10 @@ function getAssertionURLs(errType, errDetail) {
 	}
 	let urlActual = "";
 	let urlExpected = "";
-	if (errDetail.match(/(?<=expected\s').*?(?=')/g)) {
-		urlExpected = "/" + errDetail.match(/(?<=match\s\/).*?(?=\$\/)/g);
-		urlExpected = urlExpected.replace(/\\/g, "");
-		urlActual = removeDomain(errDetail.match(/(?<=expected\s').*?(?=')/g)[0]);
+	if (errDetail.match(/(?<=").*?(?=")/g)) {
+		const urls = errDetail.match(/(?<=").*?(?=")/g);
+		urlExpected = urls[0];
+		urlActual = removeDomain(urls[1]);
 	}
 	return {
 		"expected": urlExpected,

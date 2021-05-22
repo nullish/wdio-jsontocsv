@@ -2,6 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const yargs = require('yargs')
 const { v4: uuidv4 } = require('uuid');
+const stripAnsi = require('strip-ansi');
 
 const jsontocsv = (...args) => {
 
@@ -199,10 +200,10 @@ function getAssertionURLs(errType, errDetail = "") {
 	}
 	let urlActual = "";
 	let urlExpected = "";
-	if (errDetail.match(/(?<=").*?(?=")/g)) {
+	if (errDetail.match(/(?<=").*?(?=")/g) && errDetail.includes("Expect window to have url containing")) {
 		const urls = errDetail.match(/(?<=").*?(?=")/g);
-		urlExpected = urls[0];
-		urlActual = removeDomain(urls[1]);
+		urlExpected = stripAnsi(urls[0]);
+		urlActual = stripAnsi(removeDomain(urls[1]));
 	}
 	return {
 		"expected": urlExpected,

@@ -1,3 +1,4 @@
 DEV/
 node_modules/*
 reports/*
+tmp/*

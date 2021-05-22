@@ -2,3 +2,4 @@ DEV/
 node_modules/*
 reports/*
 tmp/*
+package-lock.json

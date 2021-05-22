@@ -187,10 +187,10 @@ function getImageVariance(errDetail) {
 	return ivary;
 }
 
-function getAssertionURLs(errType, errDetail) {
+function getAssertionURLs(errType, errDetail = "") {
 	// Receives assertion error type and detailm, and returns expected and actual URLs.
-	function removeDomain(inUrl) {
-		if (typeof(inUrl.match(/https?:.*?\/{2}.*?\//)) !== 'undefined') {
+	function removeDomain(inUrl = "") {
+		if (inUrl.match(/https?:.*?\/{2}.*?\//)) {
 			let outUrl = "/" + inUrl.replace(/https?:.*?\/{2}.*?\//, "");
 			return outUrl
 		} else {

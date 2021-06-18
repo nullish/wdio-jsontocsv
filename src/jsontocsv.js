@@ -179,7 +179,7 @@ function constructUID (scriptName, testName, browserName, platformName, deviceNa
 function getImageVariance(errDetail) {
 	/* Receives wdio error message. If the message contains image comparison variane from baseline 
 	the function returns the the value of the variance. */
-	var ivary = errDetail.match(/(?<=Received:\s\u001b\[31m)[0-9]{1,}/g);
+	var ivary = errDetail.match(/(?<=Received:\s{1,}\u001b\[31m)[0-9]{1,}/g);
 	if (!ivary) {
 		ivary = "";
 	} else {

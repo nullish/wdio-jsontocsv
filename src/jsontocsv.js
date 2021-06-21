@@ -49,7 +49,7 @@ if (!runs.length) {
 var out = [];
 var scriptList = []; // to hold list of script IDs to compare to files
 // Header row
-out.push('"UUID","uniqueId","specPath","scriptId","testId","suiteName","initialPath","browserName","platformName","deviceName","orientation","testName","state","errorType","error","expectedURL","actualURL","imageVariance", "start","end","duration"');
+out.push('"UUID","uniqueId","specPath","scriptId","testId","suiteName","initialPath","browserName","platformName","deviceName","orientation","testName","state","errorType","error","expectedURL","actualURL","imageVariance","start","end","duration"');
 
 for (run of runs ) {
 	var startTime = run.start;
@@ -72,7 +72,7 @@ for (run of runs ) {
 			var duration = test.duration;
 			var state = test.state;
 			var errorType = checkExist(test.errorType);
-			var error = checkExist(test.error).replace(/\n/g," | ");
+			var error = reformatError(checkExist(test.error));
 			var urlActual = getAssertionURLs(errorType, test.error).actual;
 			var urlExpected = getAssertionURLs(errorType, test.error).expected;
 			var imageVariance = getImageVariance(checkExist(test.error));
@@ -139,6 +139,17 @@ function checkExist(e) {
 		return "";
 	} else {
 		return e;
+	}
+}
+
+function reformatError(e) {
+	// Removes control characters, commas and inverted commas to prevent borken column delimiting.
+	if (e.length = 0) {
+		return "";
+	} else {
+		let rErr = stripAnsi(e);
+		rErr = rErr.replace(/\n/g, '');
+		rErr = rErr.replace(/"|,/g, ' ');
 	}
 }
 

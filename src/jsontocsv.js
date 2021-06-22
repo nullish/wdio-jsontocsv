@@ -60,7 +60,7 @@ for (run of runs ) {
 	var specPath = specURI.replace(/\/[a-zA-Z0-9()_-]*?\.js/, ""); // Extracts directory from test spec absolute file path.
 	// Select platform name based on which variant of field is populated.
 	platformName = typeof(platformName) !== 'undefined' ? platformName : run.capabilities.platform
-	var deviceName = checkExist(run.capabilities.deviceName);
+	var deviceName = getMobileDevice(run.capabilities);
 	var orientation = checkExist(run.capabilities.orientation);
 	var suites = run.suites;
 	for (suite of suites) {
@@ -132,6 +132,19 @@ function arrayDiff(arrX, arrY) {
   arrDiff = arrX.filter(elX => !arrY.includes(elX));
   return arrDiff;
 }
+
+function getMobileDevice(e) {
+	// Gets mobile device name and model depending on how it's captured in capabilities object.
+	var deviceName;
+	if (typeof(e.deviceManufacturer) !== 'undefined') {
+		deviceName = e.deviceManufacturer + ' ' + e.deviceModel;
+	} else if (typeof(e.deviceName) !== 'undefined') {
+		deviceName = e.deviceName;
+	} else {
+		deviceName = '';
+	}
+	return deviceName;
+};
 
 function checkExist(e) {
 	// Check if attribute exists in JS object and return empty string if not

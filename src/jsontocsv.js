@@ -163,6 +163,7 @@ function reformatError(e) {
 		let rErr = stripAnsi(e);
 		rErr = rErr.replace(/\n/g, '');
 		rErr = rErr.replace(/"|,/g, ' ');
+		return rErr;
 	}
 }
 

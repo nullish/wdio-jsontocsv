@@ -47,11 +47,7 @@ const jsontocsv = (...args) => {
         return;
     }
     colors.disable();
-
-    const runs = getRuns(jsonInput);
-
-
-    console.log(`RUNS:${runs}`);
+    let runs = JSON.parse(fs.readFileSync(jsonInput));
     const suppress = argv.suppress;
 
     /* Behaviour to handle if only one report JSON file is in scope rather than several merged objects.

@@ -173,14 +173,15 @@ function checkExist(e) {
 }
 
 function reformatError(e) {
-    // Removes control characters, commas and inverted commas to prevent borken column delimiting.
-    if (e.length = 0) {
-        return "";
-    } else {
-        let rErr = stripAnsi(e);
-        rErr = rErr.replace(/\n/g, '');
-        rErr = rErr.replace(/"|,/g, ' ');
-    }
+	// Removes control characters, commas and inverted commas to prevent borken column delimiting.
+	if (e.length = 0) {
+		return "";
+	} else {
+		let rErr = stripAnsi(e);
+		rErr = rErr.replace(/\n/g, '');
+		rErr = rErr.replace(/"|,/g, ' ');
+		return rErr;
+	}
 }
 
 function constructUID(scriptName, testName, browserName, platformName, deviceName) {
